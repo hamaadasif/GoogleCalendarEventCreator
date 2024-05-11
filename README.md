@@ -38,7 +38,7 @@ This application provides a graphical user interface to create events in Google 
 1. Run the script:
 
     ```bash
-    python script_name.py
+    python main.py
     ```
 
 2. The GUI will open, allowing you to input event details:
