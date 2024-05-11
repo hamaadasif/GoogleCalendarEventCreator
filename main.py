@@ -9,13 +9,11 @@ from googleapiclient.discovery import build
 import pytz
 
 def authenticate_google():
-    # Get the directory of the current script
     dir_path = os.path.dirname(os.path.abspath(__file__))
     credentials_path = os.path.join(dir_path, 'credentials.json')
 
     creds = None
     try:
-        # Attempt to load existing token from file
         creds = Credentials.from_authorized_user_file(os.path.join(dir_path, 'token.json'))
     except Exception as e:
         print("Error loading token.json:", e)
@@ -25,7 +23,6 @@ def authenticate_google():
             creds.refresh(Request())
         else:
             try:
-                # Authenticate using the credentials file in the same directory
                 flow = InstalledAppFlow.from_client_secrets_file(credentials_path, scopes=['https://www.googleapis.com/auth/calendar'])
                 creds = flow.run_local_server(port=0)
             except FileNotFoundError:
@@ -35,7 +32,6 @@ def authenticate_google():
                 print("An error occurred during authentication:", e)
                 return None
 
-            # Save the credentials for the next run
             with open(os.path.join(dir_path, 'token.json'), 'w') as token:
                 token.write(creds.to_json())
 
@@ -94,25 +90,21 @@ def submit_event():
 
 root = tk.Tk()
 root.title("Google Calendar Event Creator")
-root.geometry('300x250')  # Adjusted window size
+root.geometry('300x250')
 
 style = ttk.Style()
-style.theme_use('clam')  # Use the 'clam' theme as a base for customization
+style.theme_use('clam')
 
-# Customize button style
 style.configure('TButton', background='#333', foreground='white', font=('Helvetica', 10))
 style.map('TButton', background=[('active', '#666')])
 
-# Customize label style
 style.configure('TLabel', background='#f0f0f0', font=('Helvetica', 10))
 
-# Configure grid layout padding
-for i in range(7):  # Configure all used rows
-    root.grid_rowconfigure(i, pad=10)  # Uniform padding for top rows
-root.grid_columnconfigure(0, pad=10)  # Left padding
-root.grid_columnconfigure(2, pad=10)  # Right padding
+for i in range(7):
+    root.grid_rowconfigure(i, pad=10)
+root.grid_columnconfigure(0, pad=10)
+root.grid_columnconfigure(2, pad=10)
 
-# Widgets placement with grid
 ttk.Label(root, text="Enter the event name:").grid(row=0, column=0, sticky='w')
 event_name_var = tk.StringVar()
 ttk.Entry(root, textvariable=event_name_var).grid(row=0, column=1, sticky='ew')
